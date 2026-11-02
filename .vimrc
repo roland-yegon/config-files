@@ -6,10 +6,10 @@ set encoding=utf-8
 set hidden                    " switch buffers without saving first
 set clipboard=unnamedplus     " yank/paste uses the system clipboard
 set number                    " line numbers
-set norelativenumber            " relative numbers, great for 5j / 12k jumps
+set norelativenumber          " absolute line numbers only
 set mouse=a                   " mouse works everywhere
 set scrolloff=8               " keep 8 lines of context around the cursor
-set updatetime=300            " snappier updatepis
+set updatetime=300            " snappier updates
 
 " --- Indentation ---
 set expandtab                 " tabs become spaces
@@ -35,7 +35,9 @@ set cursorline                " highlight the current line
 set showcmd
 set wildmenu                  " better command-line completion
 set splitbelow splitright     " splits open where you'd expect
-set nowrap                    " no soft-wrapping of long lines
+set wrap                      " soft-wrap long lines
+set linebreak                 " wrap at word boundaries, not mid-word
+set breakindent               " wrapped lines keep their indentation
 set background=dark
 set termguicolors             " true color, if your terminal supports it
 
@@ -67,6 +69,14 @@ nnoremap <leader>d :bdelete<CR>
 " Y yanks to end of line, like D and C do
 nnoremap Y y$
 
+" j/k and arrows move by visual line when wrapped; counts like 5j use real lines
+nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+nnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
+nnoremap <expr> <Up> v:count == 0 ? 'gk' : 'k'
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
+
 " Keep the selection after indenting in visual mode
 vnoremap < <gv
 vnoremap > >gv
@@ -75,7 +85,7 @@ vnoremap > >gv
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" Quick split navigation
+" Quick split navigation (no <C-l>, it clears search highlight above)
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
