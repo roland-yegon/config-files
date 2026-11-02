@@ -1,0 +1,102 @@
+" Load Vim's sane defaults first (this is skipped once a vimrc exists)
+source $VIMRUNTIME/defaults.vim
+
+" --- Basics ---
+set encoding=utf-8
+set hidden                    " switch buffers without saving first
+set clipboard=unnamedplus     " yank/paste uses the system clipboard
+set number                    " line numbers
+set norelativenumber            " relative numbers, great for 5j / 12k jumps
+set mouse=a                   " mouse works everywhere
+set scrolloff=8               " keep 8 lines of context around the cursor
+set updatetime=300            " snappier updatepis
+
+" --- Indentation ---
+set expandtab                 " tabs become spaces
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+set smartindent
+
+" Go is a tabs-only religion (gofmt says so)
+autocmd FileType go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+" --- Search ---
+set ignorecase                " case-insensitive search...
+set smartcase                 " ...unless you type a capital letter
+set incsearch                 " highlight matches as you type
+set hlsearch                  " keep matches highlighted
+
+" --- UI ---
+syntax on
+filetype plugin indent on
+set cursorline                " highlight the current line
+set showcmd
+set wildmenu                  " better command-line completion
+set splitbelow splitright     " splits open where you'd expect
+set nowrap                    " no soft-wrapping of long lines
+set background=dark
+set termguicolors             " true color, if your terminal supports it
+
+" Clear search highlight with Ctrl+L (also redraws the screen)
+nnoremap <silent> <C-l> :nohlsearch<CR><C-l>
+
+" --- Theme ---
+colorscheme catppuccin_mocha
+
+" --- Undo, swap and backup (kept out of your project folders) ---
+set undofile
+set undodir=~/.vim/undo//
+set directory=~/.vim/swap//
+set backupdir=~/.vim/backup//
+set backup
+set autoread                  " reload files changed outside Vim
+
+" --- Key mappings ---
+let mapleader = " "           " Space is the leader key
+
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+
+" Buffer navigation
+nnoremap <leader>n :bnext<CR>
+nnoremap <leader>p :bprevious<CR>
+nnoremap <leader>d :bdelete<CR>
+
+" Y yanks to end of line, like D and C do
+nnoremap Y y$
+
+" Keep the selection after indenting in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" Move selected lines up/down with J and K
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Quick split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+" --- Status line (lightline) ---
+set laststatus=2              " always show the status line
+set noshowmode                " lightline already shows the mode
+let g:lightline = { 'colorscheme': 'catppuccin_mocha' }
+
+" --- File explorer (netrw) ---
+let g:netrw_banner = 0        " hide the banner
+let g:netrw_liststyle = 3     " tree view
+let g:netrw_winsize = 25      " explorer takes 25% of the width
+nnoremap <leader>e :Lexplore<CR>
+
+" --- Fuzzy finding (fzf) ---
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>g :Rg<CR>
+nnoremap <leader>h :History<CR>
+
+" --- Auto pairs ---
+let g:AutoPairsFlyMode = 0
+autocmd FileType vim let b:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'"}
