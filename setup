@@ -88,10 +88,8 @@ yay -S --needed \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
-say "Ricing with yahr"
-if clone_or_pull https://github.com/bgibson72/yahr-quickshell.git "$TMP_DIR/yahr-quickshell"; then
-    (cd "$TMP_DIR/yahr-quickshell" && ./install.sh) || warn "yahr install failed, check its output above."
-fi
+say "Ricing with illogical impulse end-4"
+bash <(curl -s https://ii.clsty.link/get)
 
 # ---------------------------------------------------------------------------
 say "All done."
