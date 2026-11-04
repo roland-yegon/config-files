@@ -96,7 +96,7 @@ say "Installing AUR apps"
 yay -S --needed \
     spotify-bin brave-bin eclipse-java-bin visual-studio-code-bin \
     google-chrome limine-mkinitcpio-hook limine-snapper-sync anydesk-bin \
-    zapzap vscode-langservers-extracted \
+    vscode-langservers-extracted \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
