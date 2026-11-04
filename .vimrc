@@ -44,7 +44,16 @@ set termguicolors             " true color, if your terminal supports it
 " Clear search highlight with Ctrl+L (also redraws the screen)
 nnoremap <silent> <C-l> :nohlsearch<CR><C-l>
 
-" --- Theme ---
+"" --- Theme ---
+augroup transparent_bg
+  autocmd!
+  autocmd ColorScheme * highlight Normal       guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * highlight NonText      guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * highlight EndOfBuffer  guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * highlight SignColumn   guibg=NONE ctermbg=NONE
+  autocmd ColorScheme * highlight LineNr       guibg=NONE ctermbg=NONE
+augroup END
+
 colorscheme catppuccin_mocha
 
 " --- Undo, swap and backup (kept out of your project folders) ---
