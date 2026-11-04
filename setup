@@ -105,8 +105,13 @@ yay -S --needed \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
+say "Ricing sddm"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh)"
+
+# ---------------------------------------------------------------------------
 say "Ricing with illogical impulse end-4"
 bash <(curl -s https://ii.clsty.link/get)
+
 
 # ---------------------------------------------------------------------------
 say "All done."
