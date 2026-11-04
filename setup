@@ -37,7 +37,9 @@ sudo pacman -Syu --needed \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd \
-    discord qtcreator
+    discord qtcreator \
+    clang gopls pyright jdk-openjdk qt6-base \
+    nodejs npm typescript typescript-language-server
 
 # ---------------------------------------------------------------------------
 say "Setting up git"
@@ -48,6 +50,7 @@ git config --global init.defaultBranch "main"
 # ---------------------------------------------------------------------------
 say "Setting up Rust"
 rustup default stable
+rustup component add rust-analyzer
 
 # ---------------------------------------------------------------------------
 say "Setting up shell (starship + Go PATH)"
@@ -69,10 +72,18 @@ say "Setting up Vim"
 mkdir -p "$HOME/.vim"/{undo,swap,backup}
 mkdir -p "$HOME/.vim/pack/themes/start" "$HOME/.vim/pack/plugins/start"
 
-clone_or_pull https://github.com/catppuccin/vim.git          "$HOME/.vim/pack/themes/start/catppuccin"
-clone_or_pull https://github.com/itchyny/lightline.vim.git   "$HOME/.vim/pack/plugins/start/lightline"
-clone_or_pull https://github.com/junegunn/fzf.vim.git        "$HOME/.vim/pack/plugins/start/fzf.vim"
-clone_or_pull https://github.com/LunarWatcher/auto-pairs.git "$HOME/.vim/pack/plugins/start/auto-pairs"
+clone_or_pull https://github.com/catppuccin/vim.git                         "$HOME/.vim/pack/themes/start/catppuccin"
+clone_or_pull https://github.com/itchyny/lightline.vim.git                  "$HOME/.vim/pack/plugins/start/lightline"
+clone_or_pull https://github.com/junegunn/fzf.vim.git                       "$HOME/.vim/pack/plugins/start/fzf.vim"
+clone_or_pull https://github.com/LunarWatcher/auto-pairs.git                "$HOME/.vim/pack/plugins/start/auto-pairs"
+clone_or_pull https://github.com/prabirshrestha/vim-lsp.git                 "$HOME/.vim/pack/plugins/start/vim-lsp"
+clone_or_pull https://github.com/mattn/vim-lsp-settings.git                 "$HOME/.vim/pack/plugins/start/vim-lsp-settings"
+clone_or_pull https://github.com/prabirshrestha/asyncomplete.vim.git        "$HOME/.vim/pack/plugins/start/asyncomplete.vim"
+clone_or_pull https://github.com/prabirshrestha/asyncomplete-lsp.vim.git    "$HOME/.vim/pack/plugins/start/asyncomplete-lsp.vim"
+clone_or_pull https://github.com/prabirshrestha/asyncomplete-buffer.vim.git "$HOME/.vim/pack/plugins/start/asyncomplete-buffer.vim"
+clone_or_pull https://github.com/hrsh7th/vim-vsnip.git                      "$HOME/.vim/pack/plugins/start/vim-vsnip"
+clone_or_pull https://github.com/hrsh7th/vim-vsnip-integ.git                "$HOME/.vim/pack/plugins/start/vim-vsnip-integ"
+clone_or_pull https://github.com/rafamadriz/friendly-snippets.git           "$HOME/.vim/pack/plugins/start/friendly-snippets"
 
 if [[ -f "$HOME/.vimrc" ]] && ! cmp -s "$REPO_DIR/.vimrc" "$HOME/.vimrc"; then
     cp "$HOME/.vimrc" "$HOME/.vimrc.bak"
@@ -85,6 +96,7 @@ say "Installing AUR apps"
 yay -S --needed \
     spotify-bin brave-bin eclipse-java-bin visual-studio-code-bin \
     google-chrome limine-mkinitcpio-hook limine-snapper-sync anydesk-bin \
+    zapzap vscode-langservers-extracted \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
@@ -93,6 +105,8 @@ bash <(curl -s https://ii.clsty.link/get)
 
 # ---------------------------------------------------------------------------
 say "All done."
+warn "Manual step: open a .java file in Vim and run :LspInstallServer (Java),"
+warn "then open a CMakeLists.txt and run :LspInstallServer (CMake)."
 read -rp "Reboot now? [y/N] " answer
 if [[ "${answer,,}" == "y" ]]; then
     reboot

@@ -116,6 +116,51 @@ nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>g :Rg<CR>
 nnoremap <leader>h :History<CR>
 
+" --- Completion (language servers + words from open files, no AI) ---
+set completeopt=menuone,noinsert,noselect   " popup never inserts anything until YOU pick
+set shortmess+=c
+
+" Tab / Shift+Tab move through the popup
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Word suggestions from all open buffers
+autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'allowlist': ['*'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ }))
+
+" --- Snippets (vsnip + friendly-snippets) ---
+" Ctrl+J expands a snippet / jumps to the next field, Ctrl+K jumps back
+imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-j>'
+smap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-j>'
+imap <expr> <C-k> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<C-k>'
+smap <expr> <C-k> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<C-k>'
+
+" --- LSP (diagnostics = your linting) ---
+let g:lsp_diagnostics_echo_cursor = 1        " show the error text when the cursor is on it
+let g:lsp_diagnostics_virtual_text_enabled = 0
+
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    nmap <buffer> gd         <plug>(lsp-definition)
+    nmap <buffer> gr         <plug>(lsp-references)
+    nmap <buffer> gi         <plug>(lsp-implementation)
+    nmap <buffer> K          <plug>(lsp-hover)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> <leader>ca <plug>(lsp-code-action)
+    nmap <buffer> <leader>F  <plug>(lsp-document-format)
+    nmap <buffer> [d         <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]d         <plug>(lsp-next-diagnostic)
+endfunction
+
+augroup lsp_install
+    autocmd!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
 " --- Auto pairs ---
 let g:AutoPairsFlyMode = 0
 autocmd FileType vim let b:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'"}
