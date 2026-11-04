@@ -33,7 +33,7 @@ add_to_bashrc() {
 say "Installing toolchain (official repos)"
 sudo pacman -Syu --needed \
     base-devel cmake ninja rustup go gdb git gvim \
-    fzf ripgrep btrfs-assistant \
+    tree fzf ripgrep btrfs-assistant \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd \
