@@ -37,9 +37,14 @@ sudo pacman -Syu --needed \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd \
-    discord qtcreator \
+    kdeconnect discord qtcreator \
     clang gopls pyright jdk-openjdk qt6-base \
     nodejs npm typescript typescript-language-server
+
+# ---------------------------------------------------------------------------
+say "Setting up ufw for kde connect"
+sudo ufw allow 1714:1764/tcp
+sudo ufw allow 1714:1764/udp
 
 # ---------------------------------------------------------------------------
 say "Setting up git"
