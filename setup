@@ -36,7 +36,7 @@ sudo pacman -Syu --needed \
     tree fzf ripgrep btrfs-assistant \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
-    ttf-jetbrains-mono-nerd \
+    ttf-jetbrains-mono-nerd inotify-tools \
     kdeconnect discord qtcreator \
     clang gopls pyright jdk-openjdk qt6-base \
     nodejs npm typescript typescript-language-server
@@ -107,6 +107,19 @@ yay -S --needed \
 # ---------------------------------------------------------------------------
 say "Ricing sddm"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh)"
+
+# ---------------------------------------------------------------------------
+say "Setting up limine"
+sudo systemctl enable --now limine-snapper-sync.service
+sudo limine-snapper-sync
+
+# The firmware may boot the fallback \EFI\BOOT\BOOTX64.EFI, and Limine reads the
+# limine.conf sitting next to it. The sync tool only updates /boot/limine.conf,
+# so a stale fallback copy hides the Snapshots menu. Move it aside (reversibly).
+if sudo test -f /boot/EFI/BOOT/limine.conf; then
+    sudo mv /boot/EFI/BOOT/limine.conf /root/limine-fallback.conf.bak
+    warn "Moved stale /boot/EFI/BOOT/limine.conf to /root/limine-fallback.conf.bak"
+fi
 
 # ---------------------------------------------------------------------------
 say "Ricing with illogical impulse end-4"
