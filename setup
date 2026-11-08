@@ -37,7 +37,7 @@ sudo pacman -Syu --needed \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd inotify-tools \
-    kdeconnect discord qtcreator \
+    kdeconnect discord zed \
     clang gopls pyright jdk-openjdk qt6-base \
     nodejs npm typescript typescript-language-server
 
@@ -99,7 +99,7 @@ cp "$REPO_DIR/.vimrc" "$HOME/.vimrc"
 # ---------------------------------------------------------------------------
 say "Installing AUR apps"
 yay -S --needed \
-    spotify brave-bin eclipse-java-bin visual-studio-code-bin \
+    spotify brave-bin \
     google-chrome limine-mkinitcpio-hook limine-snapper-sync anydesk-bin \
     vscode-langservers-extracted \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
