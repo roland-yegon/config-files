@@ -33,11 +33,11 @@ add_to_bashrc() {
 say "Installing toolchain (official repos)"
 sudo pacman -Syu --needed \
     base-devel cmake ninja rustup go gdb git gvim \
-    tree fzf ripgrep btrfs-assistant \
+    tree fzf ripgrep btrfs-assistant hyprland kitty sddm \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd inotify-tools \
-    kdeconnect discord zed \
+    kdeconnect discord zed luanti \
     clang gopls pyright jdk-openjdk qt6-base \
     nodejs npm typescript typescript-language-server
 
@@ -124,7 +124,6 @@ fi
 # ---------------------------------------------------------------------------
 say "Ricing with illogical impulse end-4"
 bash <(curl -s https://ii.clsty.link/get)
-
 
 # ---------------------------------------------------------------------------
 say "All done."
