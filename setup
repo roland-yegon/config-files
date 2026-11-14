@@ -137,6 +137,7 @@ fi
 # ---------------------------------------------------------------------------
 say "Setting up DMS (Dux Modular Shell) for niri"
 systemctl --user add-wants niri.service dms || warn "Could not bind DMS to niri. After first login run: systemctl --user add-wants niri.service dms"
+dms setup binds
 
 # ---------------------------------------------------------------------------
 say "All done."
