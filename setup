@@ -39,7 +39,7 @@ say "Installing toolchain (official repos)"
 sudo pacman -Syu --needed \
     base-devel cmake ninja rustup go gdb git gvim \
     tree fzf ripgrep btrfs-assistant niri xwayland-satellite alacritty sddm \
-    btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
+    btop fastfetch obs-studio libreoffice-still okular zip unzip tar mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd inotify-tools \
     kdeconnect discord zed luanti \
@@ -116,11 +116,6 @@ yay -S --needed \
 # ---------------------------------------------------------------------------
 say "Enabling SDDM"
 sudo systemctl enable --force sddm.service
-
-# ---------------------------------------------------------------------------
-say "Ricing sddm"
-curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh -o "$TMP_DIR/sddm-setup.sh"
-bash "$TMP_DIR/sddm-setup.sh"
 
 # ---------------------------------------------------------------------------
 say "Setting up limine"
