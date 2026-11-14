@@ -30,21 +30,30 @@ add_to_bashrc() {
 }
 
 # ---------------------------------------------------------------------------
+say "Setting up fastfetch"
+mkdir -p "$HOME/.config"
+cp -r "$REPO_DIR/fastfetch" "$HOME/.config/"
+
+# ---------------------------------------------------------------------------
 say "Installing toolchain (official repos)"
 sudo pacman -Syu --needed \
     base-devel cmake ninja rustup go gdb git gvim \
-    tree fzf ripgrep btrfs-assistant hyprland kitty sddm \
+    tree fzf ripgrep btrfs-assistant niri xwayland-satellite alacritty sddm \
     btop fastfetch obs-studio libreoffice-still okular mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd inotify-tools \
     kdeconnect discord zed luanti \
     clang gopls pyright jdk-openjdk qt6-base \
+    dux-shell matugen cava qt6-multimedia-ffmpeg \
+    xdg-desktop-portal-gnome xdg-desktop-portal-gtk \
     nodejs npm typescript typescript-language-server
 
 # ---------------------------------------------------------------------------
 say "Setting up ufw for kde connect"
+sudo systemctl enable --now ufw.service
 sudo ufw allow 1714:1764/tcp
 sudo ufw allow 1714:1764/udp
+sudo ufw --force enable
 
 # ---------------------------------------------------------------------------
 say "Setting up git"
@@ -105,8 +114,13 @@ yay -S --needed \
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
+say "Enabling SDDM"
+sudo systemctl enable --force sddm.service
+
+# ---------------------------------------------------------------------------
 say "Ricing sddm"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh)"
+curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh -o "$TMP_DIR/sddm-setup.sh"
+bash "$TMP_DIR/sddm-setup.sh"
 
 # ---------------------------------------------------------------------------
 say "Setting up limine"
@@ -117,13 +131,17 @@ sudo limine-snapper-sync
 # limine.conf sitting next to it. The sync tool only updates /boot/limine.conf,
 # so a stale fallback copy hides the Snapshots menu. Move it aside (reversibly).
 if sudo test -f /boot/EFI/BOOT/limine.conf; then
-    sudo mv /boot/EFI/BOOT/limine.conf /root/limine-fallback.conf.bak
-    warn "Moved stale /boot/EFI/BOOT/limine.conf to /root/limine-fallback.conf.bak"
+    if sudo test -f /boot/limine.conf; then
+        sudo mv /boot/EFI/BOOT/limine.conf /root/limine-fallback.conf.bak
+        warn "Moved stale /boot/EFI/BOOT/limine.conf to /root/limine-fallback.conf.bak"
+    else
+        warn "/boot/limine.conf is missing, so I left the fallback limine.conf alone. Fix the sync first, then re-run."
+    fi
 fi
 
 # ---------------------------------------------------------------------------
-say "Ricing with illogical impulse end-4"
-bash <(curl -s https://ii.clsty.link/get)
+say "Setting up DMS (Dux Modular Shell) for niri"
+systemctl --user add-wants niri.service dms || warn "Could not bind DMS to niri. After first login run: systemctl --user add-wants niri.service dms"
 
 # ---------------------------------------------------------------------------
 say "All done."

@@ -3,7 +3,7 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&height=240&color=gradient&customColorList=12,20,24&text=config-files&fontSize=68&fontColor=cdd6f4&fontAlignY=38&desc=one%20script.%20one%20reboot.%20one%20very%20smug%20terminal.&descSize=18&descAlignY=58&animation=fadeIn" alt="config-files banner" width="100%"/>
 
 <a href="https://github.com/roland-yegon/config-files">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&duration=3000&pause=900&color=CBA6F7&center=true&vCenter=true&width=700&lines=Clean+install+Arch.+Run+.%2Fsetup.+Profit.;Vim+with+real+IDE+powers.+Zero+AI+autocomplete.;LSP+%7C+Linting+%7C+Snippets+%7C+Catppuccin+Mocha;Go+%7C+Rust+%7C+C%2FC%2B%2B+%7C+Python+%7C+Java+%7C+Qt+%7C+Web;Hyprland+%2B+end-4+rice+%7C+zero+tears" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&duration=3000&pause=900&color=CBA6F7&center=true&vCenter=true&width=700&lines=Clean+install+Arch.+Run+.%2Fsetup.+Profit.;Vim+with+real+IDE+powers.+Zero+AI+autocomplete.;LSP+%7C+Linting+%7C+Snippets+%7C+Catppuccin+Mocha;Go+%7C+Rust+%7C+C%2FC%2B%2B+%7C+Python+%7C+Java+%7C+Qt+%7C+Web;niri+%2B+DMS+%7C+zero+tears" alt="Typing SVG" />
 </a>
 
 <br/><br/>
@@ -13,7 +13,7 @@
 <br/><br/>
 
 ![Arch](https://img.shields.io/badge/Arch_Linux-btw-1793D1?style=for-the-badge&logo=archlinux&logoColor=white&labelColor=1e1e2e)
-![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?style=for-the-badge&logo=hyprland&logoColor=white&labelColor=1e1e2e)
+![niri](https://img.shields.io/badge/niri-scrolling_WM-58E1FF?style=for-the-badge&labelColor=1e1e2e)
 ![Vim](https://img.shields.io/badge/Vim-019733?style=for-the-badge&logo=vim&logoColor=white&labelColor=1e1e2e)
 ![Catppuccin](https://img.shields.io/badge/Catppuccin-Mocha-cba6f7?style=for-the-badge&logo=catppuccin&logoColor=cba6f7&labelColor=1e1e2e)
 ![LSP](https://img.shields.io/badge/LSP-8_languages-a6e3a1?style=for-the-badge&labelColor=1e1e2e)
@@ -42,6 +42,7 @@
 ## 📖 Table of Contents
 
 - [✨ What is this?](#-what-is-this)
+- [⚠️ Read this before you run it](#️-read-this-before-you-run-it)
 - [🚀 Quick start](#-quick-start)
 - [🧬 What the script does](#-what-the-script-does)
 - [🧠 Vim, but make it an IDE](#-vim-but-make-it-an-ide)
@@ -80,13 +81,13 @@ Plain **Vim**, hand-tuned, with language servers, linting, snippets and word com
 <td width="50%" valign="top">
 
 ### 🖥️ Desktop
-**Hyprland**, riced with [end-4's illogical-impulse](https://github.com/end-4/dots-hyprland). Pretty enough to screenshot, fast enough to forget about.
+**niri** (a scrolling-tiling Wayland compositor) with **DMS** (Dux Modular Shell, formerly DankMaterialShell) as the bar, launcher, notifications and lock screen. Pretty enough to screenshot, fast enough to forget about.
 
 </td>
 <td width="50%" valign="top">
 
 ### 🎨 Theme
-**Catppuccin Mocha**, everywhere it can possibly fit. The Vim background is transparent so the wallpaper shows through.
+**Catppuccin Mocha** in Vim, fastfetch and this README. The desktop itself is themed by DMS from your wallpaper, so those colors will change with it. The Vim background is transparent so the wallpaper shows through.
 
 </td>
 </tr>
@@ -97,10 +98,53 @@ Plain **Vim**, hand-tuned, with language servers, linting, snippets and word com
 
 <br/>
 
+## ⚠️ Read this before you run it
+
+This is **my personal setup, published as-is.** It is not a generic installer. It makes choices that are right for my laptop and may be wrong for yours, and a few of them are hardcoded. Read the [`setup`](setup) script top to bottom before you run it, and edit it first.
+
+> [!CAUTION]
+> **Change these before running, or you will get my settings, not yours:**
+>
+> - **Git identity.** The script runs `git config --global user.name` and `user.email` with **my** name and email. Replace both, or your commits will go out as me.
+> - **The SSH key helper (`./github`).** It labels the key with my email address. Edit it first.
+
+> [!IMPORTANT]
+> **Assumptions the script makes about your machine.** If any of these are false, delete or edit the matching section, because the script stops at the first error:
+>
+> | Assumption | What to do if it's wrong |
+> |---|---|
+> | **Arch Linux** with `pacman`, `sudo`, and a normal non-root user | Not portable. It will not work on other distros. |
+> | **Limine bootloader + btrfs + snapper.** The script installs `limine-mkinitcpio-hook` and `limine-snapper-sync`, then runs the sync, but it does **not** install or configure `limine` or `snapper` for you | On GRUB or systemd-boot, delete the "Setting up limine" section, the two `limine-*` AUR packages and `btrfs-assistant`. |
+> | **Your `/boot` is the EFI partition.** The Limine step moves `/boot/EFI/BOOT/limine.conf` aside, but only if `/boot/limine.conf` exists | Check where your ESP is mounted before you run it. If the sync does not produce `/boot/limine.conf`, the script leaves the fallback config alone and warns. |
+> | **GPU and firmware drivers are already installed.** The script installs no GPU drivers or microcode | niri will not start without working graphics drivers. Install the right ones first. |
+> | **You use `bash`.** It appends to `~/.bashrc` only | On zsh or fish, edit the "Setting up shell" section. |
+> | **You use kitty.** The fastfetch logo uses kitty's image protocol | In another terminal the logo will not render. Change `type` in `fastfetch/config.jsonc`. |
+
+> [!WARNING]
+> **Things it does to your system that you might not expect:**
+>
+> - **Full system upgrade.** It runs `pacman -Syu`, so everything gets updated, kernel included. Do not run it right before something important.
+> - **Enables a firewall.** It installs `ufw`, opens ports 1714-1764 (TCP and UDP) for KDE Connect, and turns the firewall on. Incoming connections are blocked unless you allow them, and that includes any dev server you want to reach from another device.
+> - **Installs AnyDesk**, a remote-desktop tool, plus Discord, Spotify, Brave, Chrome, OBS, LibreOffice, Luanti, Zed and KDE Connect. These are my apps. Delete any you do not want, and think twice about AnyDesk.
+> - **Replaces your `~/.vimrc`** (the old one is saved to `~/.vimrc.bak`), copies fastfetch into `~/.config/fastfetch`, and appends two lines to `~/.bashrc`.
+> - **Runs unreviewed code.** AUR packages are built from community `PKGBUILD`s that the script does not check, and the Vim plugins are cloned from the latest default branch with no pinned version. Skim what you are about to build.
+> - **Is not fully unattended.** You will be asked for your sudo password, and `yay` and `makepkg` will ask for confirmations along the way.
+
+> [!NOTE]
+> **About the desktop (niri + DMS):**
+>
+> - DMS was renamed in 2.0 and 2.1, and the packages moved. On Arch the shell is now `dux-shell` (it was `dms-shell`), and the command is still `dms`. If package names have moved again by the time you read this, check [Dux Labs' docs](https://duxlabs.dev).
+> - Run `dms setup` **once, from inside a niri session** (see [After the script](#-after-the-script)). The script cannot do it for you, and it is the step that writes DMS keybinds into your niri config.
+> - After `dms setup`, check your niri config for a `spawn-at-startup "dms" "run"` line. This setup starts DMS through a systemd service, and running both starts it twice.
+> - The login screen is plain **SDDM** with no theme. You can pick the niri session from the session menu at login.
+> - Hyprland is **not** part of this setup anymore.
+
+<br/>
+
 ## 🚀 Quick start
 
 > [!WARNING]
-> This is built for a **fresh Arch install** with `sudo` set up and a normal (non-root) user. It's safe to re-run, but read the script first. Never pipe a stranger's script into your shell, and that includes me.
+> This is built for a **fresh Arch install** with `sudo` set up and a normal (non-root) user. It is built to be re-runnable, but it is **not** a generic installer. Read [the section above](#️-read-this-before-you-run-it) first, edit the script, and never pipe a stranger's script into your shell, and that includes me.
 
 **1. Make sure `git` is there:**
 
@@ -115,30 +159,37 @@ git clone https://github.com/roland-yegon/config-files.git
 cd config-files
 ```
 
-**3. Run it:**
+**3. Open `setup` in an editor and fix the things from the warning section.** Yes, really.
+
+**4. Run it:**
 
 ```bash
 ./setup
 ```
 
-**4. Do the [two manual steps](#-after-the-script), reboot when it asks, and enjoy.** ☕
+**5. Do the [manual steps](#-after-the-script), reboot when it asks, and enjoy.** ☕
 
 <details>
 <summary><b>👀 What a run looks like</b></summary>
 <br/>
 
 ```text
+==> Setting up fastfetch
 ==> Installing toolchain (official repos)
+==> Setting up ufw for kde connect
 ==> Setting up git
 ==> Setting up Rust
 ==> Setting up shell (starship + Go PATH)
 ==> Installing yay (AUR helper)
 ==> Setting up Vim
 ==> Installing AUR apps
-==> Ricing with illogical impulse end-4
+==> Enabling SDDM
+==> Setting up limine
+==> Setting up DMS (Dux Modular Shell) for niri
 ==> All done.
 [!] Manual step: open a .java file in Vim and run :LspInstallServer (Java),
 [!] then open a CMakeLists.txt and run :LspInstallServer (CMake).
+[!] Manual step: after your first niri login, run: dms setup
 Reboot now? [y/N]
 ```
 
@@ -150,14 +201,16 @@ Reboot now? [y/N]
 
 ```mermaid
 flowchart TD
-    A([🟢 ./setup]) --> B[📦 pacman: toolchain, language servers, apps]
-    B --> C[🔧 git config]
+    A([🟢 ./setup]) --> B[📦 pacman: toolchain, niri, DMS, apps]
+    B --> B2[🧱 ufw for KDE Connect]
+    B2 --> C[🔧 git config]
     C --> D[🦀 rustup + rust-analyzer]
     D --> E[🐚 starship + Go PATH in .bashrc]
     E --> F[📥 yay from the AUR]
     F --> G[✍️ Vim folders, 12 plugins, .vimrc]
     G --> H[🛍️ AUR apps and web language servers]
-    H --> I[🎨 illogical-impulse ricing]
+    H --> H2[🔐 SDDM + limine snapshots]
+    H2 --> I[🖥️ DMS bound to niri]
     I --> J([🔁 Reboot])
 
     style A fill:#a6e3a1,stroke:#1e1e2e,color:#1e1e2e
@@ -170,11 +223,13 @@ flowchart TD
     style G fill:#313244,stroke:#a6e3a1,color:#cdd6f4
     style H fill:#313244,stroke:#89b4fa,color:#cdd6f4
     style I fill:#313244,stroke:#cba6f7,color:#cdd6f4
+    style B2 fill:#313244,stroke:#f38ba8,color:#cdd6f4
+    style H2 fill:#313244,stroke:#f38ba8,color:#cdd6f4
 ```
 
 **Nice touches:**
 
-- 🔁 **Idempotent.** Run it twice, nothing explodes. Plugins update, `.bashrc` lines never duplicate, and `yay` is skipped if it's already installed.
+- 🔁 **Re-runnable.** Run it twice, nothing explodes. Plugins update, `.bashrc` lines never duplicate, and `yay` is skipped if it's already installed. (It still asks for your password and package confirmations each time.)
 - 💾 **Non-destructive.** An existing `.vimrc` gets backed up to `~/.vimrc.bak` first.
 - 🛡️ **Won't run as root.** It checks, and it refuses.
 - 🧹 **Cleans up after itself.** Temp clones live in a throwaway directory.
@@ -249,7 +304,7 @@ cmake -S . -B build && ln -sf build/compile_commands.json .
 | `rustup` | Rust, stable channel 🦀 |
 | `clang` | C/C++ compiler tooling and `clangd` |
 | `jdk-openjdk` | Java, and the runtime `jdtls` needs |
-| `qt6-base` `qtcreator` | Qt development |
+| `qt6-base` | Qt development |
 | `nodejs` `npm` `typescript` | Web tooling |
 | `gdb` | Debugging, so I can suffer in style |
 | `git` | You know why |
@@ -294,9 +349,10 @@ cmake -S . -B build && ln -sf build/compile_commands.json .
 
 | Source | Packages |
 |---|---|
-| **Official repos** | `obs-studio` `libreoffice-still` `okular` `mpv` `gwenview` `discord` |
-| **AUR (via yay)** | `spotify-bin` `brave-bin` `google-chrome` `visual-studio-code-bin` `eclipse-java-bin` `anydesk-bin` |
-| **Boot + snapshots** | `limine-mkinitcpio-hook` `limine-snapper-sync` |
+| **Official repos** | `obs-studio` `libreoffice-still` `okular` `mpv` `gwenview` `discord` `kdeconnect` `zed` `luanti` `kitty` |
+| **AUR (via yay)** | `spotify` `brave-bin` `google-chrome` `anydesk-bin` |
+| **Boot + snapshots** | `limine-mkinitcpio-hook` `limine-snapper-sync` (AUR). Needs Limine and snapper to already be set up. |
+| **Desktop** | `niri` `xwayland-satellite` `dux-shell` `matugen` `cava` `qt6-multimedia-ffmpeg` `xdg-desktop-portal-gnome` `xdg-desktop-portal-gtk` `sddm` `ufw` |
 
 </details>
 
@@ -379,7 +435,7 @@ Installed with Vim's native `pack/` system, so there's no plugin manager and not
 
 ## 🪄 After the script
 
-Two language servers can't be installed unattended, because they need an open file of their type. Do this once:
+Two language servers can't be installed unattended, because they need an open file of their type, and DMS has to be set up from inside niri. Do these once:
 
 **1. Java.** Open any `.java` file in Vim and run:
 
@@ -396,7 +452,15 @@ Two language servers can't be installed unattended, because they need an open fi
 > [!TIP]
 > The first time `jdtls` starts, it indexes before it talks. Give it 10 to 20 seconds before deciding it's broken.
 
-**3. (Optional) GitHub SSH key.** The repo includes a helper that generates an ed25519 key, loads it into the agent, and prints the public key ready to paste into GitHub:
+**3. DMS keybinds.** After you reboot, pick the **niri** session at the SDDM login screen, log in, and run this once from a terminal inside niri:
+
+```bash
+dms setup
+```
+
+Then open your niri config and make sure it does not also contain a `spawn-at-startup "dms" "run"` line. The script already starts DMS through systemd, and you do not want two copies.
+
+**4. (Optional) GitHub SSH key.** The repo includes a helper that generates an ed25519 key, loads it into the agent, and prints the public key ready to paste into GitHub:
 
 ```bash
 ./github
@@ -439,6 +503,7 @@ Everything follows **Catppuccin Mocha**.
 config-files/
 ├── 📜 setup       # The one script to rule them all
 ├── 🎹 .vimrc      # Vim config (LSP, snippets, Catppuccin, fzf, lightline)
+├── 🖼️ fastfetch/  # fastfetch config + Arch logos (needs kitty's image protocol)
 ├── 🔑 github      # Generates an SSH key for GitHub
 └── 📖 README.md   # You are here
 ```
@@ -524,6 +589,49 @@ yay -S <package-name>
 </details>
 
 <details>
+<summary><b>DMS isn't running after I log in to niri</b></summary>
+<br/>
+
+Check whether the service is bound to niri and what it says:
+
+```bash
+systemctl --user status dms
+journalctl --user -u dms -e
+```
+
+If it was never bound, run this once and log in again:
+
+```bash
+systemctl --user add-wants niri.service dms
+```
+
+</details>
+
+<details>
+<summary><b>The bar shows up twice (or there's a blank gap)</b></summary>
+<br/>
+
+DMS is probably being started twice, once by the systemd service and once by a `spawn-at-startup "dms" "run"` line in your niri config. Remove the line from the niri config.
+
+</details>
+
+<details>
+<summary><b>niri isn't in the SDDM session list</b></summary>
+<br/>
+
+Make sure the `niri` package is installed, then reboot. If it still isn't listed, check `/usr/share/wayland-sessions/` for a niri entry.
+
+</details>
+
+<details>
+<summary><b>The script stopped at the firewall or Limine step</b></summary>
+<br/>
+
+Those sections assume things about your machine (see [the warnings](#️-read-this-before-you-run-it)). Because the script stops on the first error, fix the cause or delete that section, then re-run it.
+
+</details>
+
+<details>
 <summary><b><code>starship</code> isn't showing up in my prompt</b></summary>
 <br/>
 
@@ -542,7 +650,7 @@ source ~/.bashrc
 Standing on the shoulders of giants:
 
 - 🎨 [Catppuccin](https://github.com/catppuccin) for the best palette in the terminal
-- 🖥️ [end-4 / dots-hyprland](https://github.com/end-4/dots-hyprland) for the illogical-impulse rice
+- 🖥️ [niri](https://github.com/niri-wm/niri) for the compositor, and [Dux Labs](https://duxlabs.dev) for DMS (Dux Modular Shell)
 - 🧠 [vim-lsp](https://github.com/prabirshrestha/vim-lsp), [asyncomplete](https://github.com/prabirshrestha/asyncomplete.vim) and [vim-vsnip](https://github.com/hrsh7th/vim-vsnip) for making Vim feel like an IDE
 - 🚀 [Starship](https://starship.rs) for the prompt
 - 🧰 [capsule-render](https://github.com/kyechan99/capsule-render), [readme-typing-svg](https://github.com/DenverCoder1/readme-typing-svg), [skillicons.dev](https://skillicons.dev) and [shields.io](https://shields.io) for the eye candy
