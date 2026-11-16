@@ -38,7 +38,7 @@ cp -r "$REPO_DIR/fastfetch" "$HOME/.config/"
 say "Installing toolchain (official repos)"
 sudo pacman -Syu --needed \
     base-devel cmake ninja rustup go gdb git gvim \
-    tree fzf ripgrep btrfs-assistant niri xwayland-satellite alacritty sddm \
+    tree fzf ripgrep btrfs-assistant niri xwayland-satellite kitty sddm \
     btop fastfetch obs-studio libreoffice-still okular zip unzip tar mpv gwenview \
     man-pages man-db plocate tldr starship \
     ttf-jetbrains-mono-nerd inotify-tools \
@@ -46,7 +46,7 @@ sudo pacman -Syu --needed \
     clang gopls pyright jdk-openjdk qt6-base \
     dux-shell matugen cava qt6-multimedia-ffmpeg \
     xdg-desktop-portal-gnome xdg-desktop-portal-gtk \
-    nodejs npm typescript typescript-language-server
+    nodejs npm typescript typescript-language-server noto-fonts-emoji
 
 # ---------------------------------------------------------------------------
 say "Setting up ufw for kde connect"
@@ -110,7 +110,7 @@ say "Installing AUR apps"
 yay -S --needed \
     spotify brave-bin \
     google-chrome limine-mkinitcpio-hook limine-snapper-sync anydesk-bin \
-    vscode-langservers-extracted \
+    vscode-langservers-extracted zapzap\
     || warn "Some AUR packages failed. Re-run: yay -S <package> for the ones that did."
 
 # ---------------------------------------------------------------------------
