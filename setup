@@ -57,7 +57,7 @@ sudo ufw --force enable
 
 # ---------------------------------------------------------------------------
 say "Setting up git"
-git config --global user.name "rolandyegon"
+git config --global user.name "Roland Yegon"
 git config --global user.email "rolandyegon@gmail.com"
 git config --global init.defaultBranch "main"
 
